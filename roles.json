@@ -56,11 +56,10 @@
       "id": "chairperson-roar",
       "title": "Chairperson - R.O.A.R.",
       "description": [
-        "Lead the Rotaract Outstanding Achievement Recognition (R.O.A.R.) program",
+        "Lead the RSAMDIO's Outstanding Awards & Recognition (R.O.A.R.)",
         "Develop recognition criteria and evaluation processes",
-        "Coordinate with clubs and districts to identify outstanding achievements",
-        "Organize recognition ceremonies and award presentations",
-        "Promote excellence and achievement across the zone"
+        "Coordinate with R.O.A.R. Committee, RSAMDIO Secretariat and the President to identify outstanding achievements",
+        "Corodinate & Organize recognition ceremony and award presentation"
       ]
     },
     {
@@ -70,7 +69,6 @@
         "Oversee all editorial content for RSAMDIO publications and communications",
         "Edit and proofread all official documents, newsletters, and reports",
         "Maintain editorial standards and brand consistency",
-        "Coordinate with writers and content creators",
         "Manage publication schedules and content calendars"
       ]
     },
@@ -79,10 +77,12 @@
       "title": "Zone Director / Coordinator",
       "description": [
         "Coordinate activities and communication within assigned zones",
-        "Serve as the primary liaison between RSAMDIO and zone clubs",
-        "Facilitate zone meetings, events, and collaborative projects",
-        "Support clubs in achieving their goals and objectives",
-        "Report zone activities and progress to the executive board"
+        "Serve as the primary liaison between RSAMDIO and Districts",
+        "Facilitate Zone meetings, RSAMDIO initatives, and collaborative activities",
+        "Provide guidance and support to DRRs in achieving their goals and objectives",
+        "Represent RSAMDIO at Activities and Events of the Districts within the assigned Zone",
+        "Ensure that the Districts within the assigned Zone are well represented and supported by RSAMDIO",
+        "PS: Consider the time commitment and willingness to travel required to visit the Districts within the assigned Zone before nominating for this role"
       ]
     },
     {
@@ -90,54 +90,53 @@
       "title": "Director - International Relations",
       "description": [
         "Develop and maintain relationships with Rotaract organizations globally",
-        "Coordinate international service projects and exchanges",
+        "Facilitate international service initiatives and exchanges with other Rotaract organizations globally",
         "Facilitate cross-cultural learning and collaboration opportunities",
-        "Manage international partnerships and memorandums of understanding",
-        "Represent RSAMDIO at international Rotaract events and conferences"
+        "Facilitate engagement and networking opportunities between District ISDs and International Service Chairs of member Districts",
+        "Manage international partnerships and memorandums of understanding"
       ]
     },
     {
       "id": "director-service-programs",
       "title": "Director - Service Programs",
       "description": [
-        "Develop and coordinate service projects across the zone",
-        "Support clubs in planning and executing impactful service initiatives",
-        "Identify community needs and create service opportunities",
-        "Measure and report on service impact and outcomes",
-        "Promote the importance of service in Rotaract"
+        "Develop and coordinate service initatives across the Rotaract South Asia",
+        "Support Districts in planning and executing service initiatives",
+        "Mange coordination and communication with Partners",
+        "Measure and report on service impact and outcomes to the Partners",
+        "Manage the Partnerships and Develeverables as per the Memorandums of Understanding with the Partners"
       ]
     },
     {
       "id": "director-foundation-programs",
       "title": "Director - Foundation Programs",
       "description": [
-        "Promote Rotary Foundation programs and initiatives within the zone",
+        "Promote Rotary Foundation programs and iniatives",
         "Educate members about Foundation grants and opportunities",
-        "Coordinate Foundation-related projects and fundraising",
-        "Support clubs in applying for and managing Foundation grants",
-        "Maintain relationships with Rotary Foundation representatives"
+        "Coordinate Foundation-related programs.",
+        "Maintain relationships with Rotary Foundation representatives and partners",
+        "Manage the Partnerships and Develeverables as per the Memorandums of Understanding with the Partners"
       ]
     },
     {
       "id": "director-learning-programs",
       "title": "Director - Learning Programs",
       "description": [
-        "Develop and coordinate educational and training programs for members",
-        "Organize workshops, seminars, and skill-building sessions",
-        "Create learning resources and materials for clubs",
-        "Facilitate leadership development and capacity building",
-        "Promote continuous learning and professional development"
+        "Develop and coordinate educational and learning programs",
+        "Create learning resources and materials for Rotaractors, Club Leaders and District Leaders",
+        "Facilitate learning andleadership development iniatives",
+        "Coordinate and manage relationships with Rotary International Learning Programs representatives",
+        "Promote continuous learning and Rotary International Learning Programs"
       ]
     },
     {
       "id": "director-fellowship-programs",
       "title": "Director - Fellowship Programs",
       "description": [
-        "Organize social events, networking opportunities, and fellowship activities",
-        "Promote camaraderie and friendship among Rotaract members",
-        "Coordinate zone-wide fellowship events and celebrations",
-        "Support clubs in organizing local fellowship activities",
-        "Create opportunities for members to connect and build relationships"
+        "Develop and coordinate fellowship activites and networking opportunities",
+        "Coordinate Zonal fellowship activities and events.",
+        "Coordinate with the RI Director's office to integrate the Fellowship Programs and Initiatives",
+        "Create opportunities for Rotaractors to connect during RSA MDIO's events."
       ]
     },
     {
