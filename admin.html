@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin, RY 2026-27, RSA MDIO</title>
+  <meta name="description" content="Admin panel for managing RSAMDIO 2026-27 nominations" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="color-scheme" content="dark light" />
+  
+  <!-- Canonical -->
+  <link rel="canonical" href="https://apply.rsamdio.org/admin.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:url" content="https://apply.rsamdio.org/admin.html" />
+  <meta property="og:title" content="Admin, RY 2026-27, RSA MDIO" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/images/rsa2627ogimg.webp" />
+  <meta property="og:image:type" content="image/webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="800" />
+  <meta property="og:description" content="Admin panel for managing RSAMDIO 2026-27 nominations" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Admin, RY 2026-27, RSA MDIO" />
+  <meta name="twitter:description" content="Admin panel for managing RSAMDIO 2026-27 nominations" />
+  <meta name="twitter:image" content="assets/images/rsa2627ogimg.webp" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/images/favicon.png" />
+</head>
+<body>
+  <div class="admin-container" id="adminContainer">
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+      <div class="login-card">
+        <h1 class="login-title">RSAMDIO Admin</h1>
+        <p class="login-subtitle">Sign in with a magic link sent to your email</p>
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <label for="adminEmail">Email</label>
+            <input type="email" id="adminEmail" class="form-input" required placeholder="admin@example.com" autocomplete="email" />
+          </div>
+          <button type="submit" class="btn btn--primary btn--full" id="sendLinkBtn">
+            <span id="sendLinkText">Send Magic Link</span>
+            <span id="sendLinkSpinner" class="spinner hidden"></span>
+          </button>
+        </form>
+        <div id="loginError" class="error-message hidden"></div>
+        <div id="loginSuccess" class="success-message hidden">
+          <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22,4 12,14.01 9,11.01"></polyline>
+          </svg>
+          <div>
+            <strong>Magic link sent!</strong>
+            <p>Check your email and click the link to sign in. The link will expire in 10 minutes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard hidden" id="adminDashboard">
+      <!-- Header -->
+      <header class="admin-header">
+        <div class="admin-header__inner">
+          <div class="admin-header__info">
+            <img src="assets/images/RSACouncil2627.webp" alt="Rotaract South Asia MDIO Council 2627" class="admin-header__logo" onerror="this.style.display='none'" />
+          </div>
+          <div class="admin-header__actions">
+            <button id="refreshBtn" class="btn-icon" title="Refresh">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.48L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </button>
+            <button id="logoutBtn" class="btn btn--secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <!-- Stats Section -->
+        <section class="stats-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card__value" id="statTotal">0</div>
+              <div class="stat-card__label">Total Applications</div>
+            </div>
+            <div class="stat-card stat-card--pending">
+              <div class="stat-card__value" id="statPending">0</div>
+              <div class="stat-card__label">Pending</div>
+            </div>
+            <div class="stat-card stat-card--review">
+              <div class="stat-card__value" id="statReview">0</div>
+              <div class="stat-card__label">Under Review</div>
+            </div>
+            <div class="stat-card stat-card--shortlisted">
+              <div class="stat-card__value" id="statShortlisted">0</div>
+              <div class="stat-card__label">Shortlisted</div>
+            </div>
+            <div class="stat-card stat-card--selected">
+              <div class="stat-card__value" id="statSelected">0</div>
+              <div class="stat-card__label">Selected</div>
+            </div>
+            <div class="stat-card stat-card--rejected">
+              <div class="stat-card__value" id="statRejected">0</div>
+              <div class="stat-card__label">Rejected</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Applications Section -->
+        <section class="applications-section">
+          <!-- Table Header with Filters -->
+          <div class="table-toolbar">
+            <div class="table-toolbar__header">
+              <h2 class="table-title">Applications</h2>
+              <span class="table-count" id="resultsCount">0 applications</span>
+            </div>
+            <div class="table-toolbar__controls">
+              <div class="filters-bar">
+                <div class="filter-item">
+                  <select id="statusFilter" class="filter-select" title="Filter by status">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Shortlisted">Shortlisted</option>
+                    <option value="Selected">Selected</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+                <div class="filter-item">
+                  <select id="roleFilter" class="filter-select" title="Filter by role">
+                    <option value="">All Roles</option>
+                    <option value="Vice President">Vice President</option>
+                    <option value="General Secretary">General Secretary</option>
+                    <option value="Secretary (Reporting / Communications / Initiatives / Special Programs)">Secretary (Reporting / Communications / Initiatives / Special Programs)</option>
+                    <option value="Treasurer">Treasurer</option>
+                    <option value="Sergeant at Arms">Sergeant at Arms</option>
+                    <option value="Chairperson - R.O.A.R.">Chairperson - R.O.A.R.</option>
+                    <option value="Editor">Editor</option>
+                    <option value="Zone Director / Coordinator">Zone Director / Coordinator</option>
+                    <option value="Director - International Relations">Director - International Relations</option>
+                    <option value="Director - Service Programs">Director - Service Programs</option>
+                    <option value="Director - Foundation Programs">Director - Foundation Programs</option>
+                    <option value="Director - Learning Programs">Director - Learning Programs</option>
+                    <option value="Director - Fellowship Programs">Director - Fellowship Programs</option>
+                    <option value="Director - Membership Programs">Director - Membership Programs</option>
+                    <option value="Director - Design & Branding">Director - Design & Branding</option>
+                    <option value="Director - Marketing & Communications">Director - Marketing & Communications</option>
+                    <option value="Director - Web & Tech">Director - Web & Tech</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="filter-item filter-item--search">
+                  <div class="search-input-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"/>
+                      <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search by name or email..." />
+                    <button type="button" id="clearSearchBtn" class="search-clear hidden" title="Clear search">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <button id="clearFiltersBtn" class="btn-text" title="Clear all filters">Clear</button>
+              </div>
+              <button id="exportBtn" class="btn-icon" title="Export to CSV">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>
+                    <button class="sort-btn" data-sort="name">
+                      <span>Name</span>
+                      <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 13l5 5 5-5M7 6l5-5 5 5"/>
+                      </svg>
+                    </button>
+                  </th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>1st Preference</th>
+                  <th>2nd Preference</th>
+                  <th>
+                    <button class="sort-btn" data-sort="status">
+                      <span>Status</span>
+                      <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 13l5 5 5-5M7 6l5-5 5 5"/>
+                      </svg>
+                    </button>
+                  </th>
+                  <th>
+                    <button class="sort-btn" data-sort="date">
+                      <span>Submitted</span>
+                      <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 13l5 5 5-5M7 6l5-5 5 5"/>
+                      </svg>
+                    </button>
+                  </th>
+                  <th class="th-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="applicationsTableBody">
+                <tr>
+                  <td colspan="8" class="table-loading">
+                    <div class="loading-state">
+                      <div class="spinner-large"></div>
+                      <span>Loading applications...</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Cards Container -->
+          <div class="mobile-cards-container" id="mobileCardsContainer">
+            <div class="loading-state">
+              <div class="spinner-large"></div>
+              <span>Loading applications...</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <!-- Shared Firebase Configuration -->
+  <script src="assets/js/firebase-config.js"></script>
+  <!-- Admin Script -->
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
