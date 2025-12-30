@@ -57,7 +57,7 @@
           </ul>
         </div>
         <div class="role-card__footer">
-          <a href="index.html" class="btn btn--outline btn--small">
+          <a href="/" class="btn btn--outline btn--small">
             Nominate Now
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; margin-left: 6px;">
               <path d="M5 12h14M12 5l7 7-7 7"/>

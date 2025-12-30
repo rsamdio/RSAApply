@@ -382,11 +382,11 @@
     if (q.type === 'intro') {
       const start = el('button', { class: 'btn btn--primary', onclick: (e) => { e.preventDefault(); goTo(1); } }, 'Start Nomination Form');
       const viewRoles = el('a', { 
-        href: 'roles.html', 
+        href: 'roles/', 
         class: 'btn btn--secondary btn--roles-link',
         onclick: (e) => { e.stopPropagation(); }
       }, 
-        'View your roles and responsibilities',
+        'View all roles and responsibilities',
         el('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', class: 'btn__icon' },
           el('path', { d: 'M5 12h14M12 5l7 7-7 7' })
         )
