@@ -211,10 +211,11 @@
 }
 
 .btn-icon:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 58, 138, 0.2);
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: #ffffff;
   transform: translateY(-1px);
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-icon:active {
@@ -536,7 +537,7 @@
 
 .btn-text {
   background: none;
-  border: none;
+  border: 1px solid transparent;
   color: var(--color-text-secondary);
   padding: 10px 16px;
   font-size: 14px;
@@ -551,8 +552,10 @@
 }
 
 .btn-text:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--color-primary);
+  background: rgba(30, 58, 138, 0.2);
+  color: #ffffff;
+  border: 1px solid var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* ===== Table ===== */
@@ -966,9 +969,10 @@
 }
 
 .btn-expand:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 58, 138, 0.2);
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .btn-expand svg {
@@ -976,11 +980,7 @@
   height: 18px;
   stroke: currentColor;
   fill: none;
-  transition: transform var(--t-fast);
-}
-
-.application-row.expanded .btn-expand svg {
-  transform: rotate(180deg);
+  transition: all var(--t-fast);
 }
 
 /* ===== Loading & Empty States ===== */
