@@ -337,7 +337,7 @@
       ` : '';
 
       return `
-        <tr class="application-row ${isExpanded ? 'expanded' : ''}" data-id="${app.id}">
+        <tr class="application-row ${isExpanded ? 'expanded' : ''}" data-id="${app.id}" onclick="toggleApplicationRow('${app.id}')">
           <td>${escapeHtml(app.full_name || '-')}</td>
           <td>${escapeHtml(app.email || '-')}</td>
           <td>${escapeHtml(app.phone || '-')}</td>
@@ -345,7 +345,7 @@
           <td><span class="status-badge status-badge--${getStatusClass(app.status || 'Pending')}">${app.status || 'Pending'}</span></td>
           <td>${submittedDate}</td>
           <td style="text-align: center;">
-            <button class="btn-expand" onclick="toggleApplicationRow('${app.id}')" title="${isExpanded ? 'Collapse' : 'Expand'}">
+            <button class="btn-expand" onclick="event.stopPropagation(); toggleApplicationRow('${app.id}')" title="${isExpanded ? 'Collapse' : 'Expand'}">
               ${expandIcon}
             </button>
           </td>
@@ -476,7 +476,7 @@
       ` : '';
 
       return `
-        <div class="mobile-card" data-id="${app.id}">
+        <div class="mobile-card" data-id="${app.id}" onclick="toggleApplicationRow('${app.id}')">
           <div class="mobile-card__header">
             <div class="mobile-card__title">${escapeHtml(app.full_name || '-')}</div>
             <div class="mobile-card__status">
@@ -502,7 +502,7 @@
             </div>
           </div>
           <div class="mobile-card__actions">
-            <button class="btn-expand" onclick="toggleApplicationRow('${app.id}')" title="${isExpanded ? 'Collapse' : 'Expand'}">
+            <button class="btn-expand" onclick="event.stopPropagation(); toggleApplicationRow('${app.id}')" title="${isExpanded ? 'Collapse' : 'Expand'}">
               ${expandIcon}
             </button>
           </div>
