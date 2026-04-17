@@ -11,16 +11,14 @@
   // DOM Elements
   const loginScreen = document.getElementById('loginScreen');
   const adminDashboard = document.getElementById('adminDashboard');
-  const loginForm = document.getElementById('loginForm');
   const loginError = document.getElementById('loginError');
-  const loginSuccess = document.getElementById('loginSuccess');
-  const sendLinkBtn = document.getElementById('sendLinkBtn');
-  const sendLinkText = document.getElementById('sendLinkText');
-  const sendLinkSpinner = document.getElementById('sendLinkSpinner');
+  const googleSignInBtn = document.getElementById('googleSignInBtn');
+  const googleSignInText = document.getElementById('googleSignInText');
+  const googleSignInSpinner = document.getElementById('googleSignInSpinner');
   const logoutBtn = document.getElementById('logoutBtn');
   const applicationsTableBody = document.getElementById('applicationsTableBody');
   const statusFilter = document.getElementById('statusFilter');
-  const roleFilter = document.getElementById('roleFilter');
+  const committeeFilter = document.getElementById('roleFilter');
   const searchInput = document.getElementById('searchInput');
   const clearFiltersBtn = document.getElementById('clearFiltersBtn');
   const clearSearchBtn = document.getElementById('clearSearchBtn');
@@ -28,16 +26,13 @@
   const exportBtn = document.getElementById('exportBtn');
   const resultsCount = document.getElementById('resultsCount');
   const mobileCardsContainer = document.getElementById('mobileCardsContainer');
+  const committeeStatCards = document.querySelectorAll('.committee-stat-card');
 
   // State
   let expandedRows = new Set(); // Track expanded row IDs
   let applications = [];
-  // Get the current page URL for magic link redirect
-  const getActionCodeSettings = () => ({
-    // URL you want to redirect back to after email verification
-    url: window.location.origin + window.location.pathname,
-    handleCodeInApp: true
-  });
+  const googleProvider = new firebase.auth.GoogleAuthProvider();
+  googleProvider.setCustomParameters({ prompt: 'select_account' });
 
   // Check authentication state
   auth.onAuthStateChanged((user) => {
@@ -46,106 +41,47 @@
       loadApplications();
     } else {
       showLogin();
-      // Check if this is a magic link callback
-      checkMagicLinkCallback();
     }
   });
 
-  // Check if URL contains magic link callback
-  function checkMagicLinkCallback() {
-    if (auth.isSignInWithEmailLink(window.location.href)) {
-      // Get the email from localStorage
-      let email = window.localStorage.getItem('emailForSignIn');
-      
-      if (!email) {
-        // User opened the link on a different device - prompt for email
-        const inputEmail = prompt('Please enter your email address to complete sign in:');
-        if (inputEmail) {
-          email = inputEmail.trim();
-          window.localStorage.setItem('emailForSignIn', email);
-        } else {
-          showError('Email is required to complete sign in.');
-          window.history.replaceState({}, document.title, window.location.pathname);
+  // Sign in with Google
+  async function signInWithGoogle() {
+    try {
+      googleSignInBtn.disabled = true;
+      googleSignInText.textContent = 'Signing in...';
+      googleSignInSpinner.classList.remove('hidden');
+      loginError.classList.add('hidden');
+
+      await auth.signInWithPopup(googleProvider);
+    } catch (error) {
+      // Fallback for browsers that block popups.
+      if (error && error.code === 'auth/popup-blocked') {
+        try {
+          await auth.signInWithRedirect(googleProvider);
           return;
+        } catch (redirectError) {
+          console.error('Google redirect sign-in error:', redirectError);
+          showError(redirectError.message || 'Google sign-in failed. Please try again.');
         }
+      } else {
+        console.error('Google sign-in error:', error);
+        showError(error.message || 'Google sign-in failed. Please try again.');
       }
-      
-      // Sign in with the email link
-      signInWithEmailLink(email, window.location.href);
+    } finally {
+      googleSignInBtn.disabled = false;
+      googleSignInText.textContent = 'Continue with Google';
+      googleSignInSpinner.classList.add('hidden');
     }
   }
 
-  // Sign in with email link
-  async function signInWithEmailLink(email, emailLink) {
-    try {
-      sendLinkBtn.disabled = true;
-      sendLinkText.textContent = 'Signing in...';
-      sendLinkSpinner.classList.remove('hidden');
-      
-      await auth.signInWithEmailLink(email, emailLink);
-      
-      // Clear email from localStorage
-      window.localStorage.removeItem('emailForSignIn');
-      
-      // Clear URL parameters
-      window.history.replaceState({}, document.title, window.location.pathname);
-      
-      loginError.classList.add('hidden');
-      loginSuccess.classList.add('hidden');
-    } catch (error) {
-      console.error('Sign in error:', error);
-      showError(error.message || 'Failed to sign in. Please try requesting a new magic link.');
-      sendLinkBtn.disabled = false;
-      sendLinkText.textContent = 'Send Magic Link';
-      sendLinkSpinner.classList.add('hidden');
-    }
+  if (googleSignInBtn) {
+    googleSignInBtn.addEventListener('click', signInWithGoogle);
   }
-
-  // Send magic link
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('adminEmail').value.trim();
-
-    if (!email) {
-      showError('Please enter your email address.');
-      return;
-    }
-
-    try {
-      sendLinkBtn.disabled = true;
-      sendLinkText.textContent = 'Sending...';
-      sendLinkSpinner.classList.remove('hidden');
-      loginError.classList.add('hidden');
-      loginSuccess.classList.add('hidden');
-
-      // Save email to localStorage for magic link callback
-      window.localStorage.setItem('emailForSignIn', email);
-
-      // Send magic link
-      await auth.sendSignInLinkToEmail(email, getActionCodeSettings());
-      
-      // Show success message
-      loginSuccess.classList.remove('hidden');
-      sendLinkBtn.disabled = false;
-      sendLinkText.textContent = 'Resend Magic Link';
-      sendLinkSpinner.classList.add('hidden');
-      
-      // Clear form
-      document.getElementById('adminEmail').value = '';
-    } catch (error) {
-      console.error('Send link error:', error);
-      showError(error.message || 'Failed to send magic link. Please try again.');
-      sendLinkBtn.disabled = false;
-      sendLinkText.textContent = 'Send Magic Link';
-      sendLinkSpinner.classList.add('hidden');
-    }
-  });
 
   // Helper function to show error
   function showError(message) {
     loginError.textContent = message;
     loginError.classList.remove('hidden');
-    loginSuccess.classList.add('hidden');
   }
 
   // Logout
@@ -209,7 +145,7 @@
     } catch (error) {
       console.error('Error loading applications:', error);
       if (applicationsTableBody) {
-        applicationsTableBody.innerHTML = '<tr><td colspan="8" class="error-row">Error loading applications. Please refresh.</td></tr>';
+        applicationsTableBody.innerHTML = '<tr><td colspan="7" class="error-row">Error loading applications. Please refresh.</td></tr>';
       }
       if (mobileCardsContainer) {
         mobileCardsContainer.innerHTML = '<div class="empty-state"><p>Error loading applications. Please refresh.</p></div>';
@@ -218,8 +154,16 @@
   }
 
   // Filter applications
+  function getCommitteeScopedApplications() {
+    const committeeValue = committeeFilter.value;
+    if (!committeeValue) {
+      return [...applications];
+    }
+    return applications.filter(app => app.committee === committeeValue);
+  }
+
   function getFilteredApplications() {
-    let filtered = [...applications];
+    let filtered = getCommitteeScopedApplications();
 
     // Status filter
     const statusValue = statusFilter.value;
@@ -227,12 +171,11 @@
       filtered = filtered.filter(app => app.status === statusValue);
     }
 
-    // Role filter
-    const roleValue = roleFilter.value;
-    if (roleValue) {
+    // Committee filter
+    const committeeValue = committeeFilter.value;
+    if (committeeValue) {
       filtered = filtered.filter(app => 
-        app.first_preference_role === roleValue || 
-        app.second_preference_role === roleValue
+        app.committee === committeeValue
       );
     }
 
@@ -279,7 +222,7 @@
     }
 
     if (filtered.length === 0) {
-      applicationsTableBody.innerHTML = '<tr><td colspan="8" class="table-loading"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>No applications found matching your filters.</p></div></td></tr>';
+      applicationsTableBody.innerHTML = '<tr><td colspan="7" class="table-loading"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>No applications found matching your filters.</p></div></td></tr>';
       return;
     }
 
@@ -288,13 +231,7 @@
         ? new Date(app.createdAt).toLocaleDateString()
         : (app.timestamp ? 'N/A' : 'N/A');
       
-      const firstRole = app.first_preference_role === 'Other' && app.first_preference_role_other
-        ? `Other: ${escapeHtml(app.first_preference_role_other)}`
-        : (app.first_preference_role || '-');
-      
-      const secondRole = app.second_preference_role === 'Other' && app.second_preference_role_other
-        ? `Other: ${escapeHtml(app.second_preference_role_other)}`
-        : (app.second_preference_role || '-');
+      const committee = app.committee || '-';
 
       const isExpanded = expandedRows.has(app.id);
       const expandIcon = isExpanded 
@@ -303,7 +240,7 @@
 
       const detailRow = isExpanded ? `
         <tr class="detail-row" data-detail-id="${app.id}">
-          <td colspan="8">
+          <td colspan="7">
             <div class="application-details">
               <div class="detail-section">
                 <h3>Personal Information</h3>
@@ -329,10 +266,6 @@
                     <div>${escapeHtml(app.district || '-')}</div>
                   </div>
                   <div class="detail-item">
-                    <label>Year of Serving as DRR:</label>
-                    <div>${escapeHtml(app.drr_year || '-')}</div>
-                  </div>
-                  <div class="detail-item">
                     <label>Years in Rotaract:</label>
                     <div>${escapeHtml(app.years_in_rotaract || '-')}</div>
                   </div>
@@ -340,23 +273,19 @@
               </div>
 
               <div class="detail-section">
-                <h3>Role Preferences</h3>
+                <h3>Committee Application</h3>
                 <div class="detail-grid">
                   <div class="detail-item detail-item--full">
-                    <label>1st Preference Role:</label>
-                    <div>${firstRole}</div>
+                    <label>Committee:</label>
+                    <div>${escapeHtml(committee)}</div>
                   </div>
                   <div class="detail-item detail-item--full">
-                    <label>Vision for 1st Preference Role:</label>
-                    <div class="detail-textarea">${escapeHtmlWithBreaks(app.vision_first_role)}</div>
+                    <label>Rotaract Journey:</label>
+                    <div class="detail-textarea">${escapeHtmlWithBreaks(app.rotaract_journey)}</div>
                   </div>
                   <div class="detail-item detail-item--full">
-                    <label>2nd Preference Role:</label>
-                    <div>${secondRole}</div>
-                  </div>
-                  <div class="detail-item detail-item--full">
-                    <label>Vision for 2nd Preference Role:</label>
-                    <div class="detail-textarea">${escapeHtmlWithBreaks(app.vision_second_role)}</div>
+                    <label>Why You Are a Strong Fit:</label>
+                    <div class="detail-textarea">${escapeHtmlWithBreaks(app.vision_committee)}</div>
                   </div>
                 </div>
               </div>
@@ -412,8 +341,7 @@
           <td>${escapeHtml(app.full_name || '-')}</td>
           <td>${escapeHtml(app.email || '-')}</td>
           <td>${escapeHtml(app.phone || '-')}</td>
-          <td>${firstRole}</td>
-          <td>${secondRole}</td>
+          <td>${escapeHtml(committee)}</td>
           <td><span class="status-badge status-badge--${getStatusClass(app.status || 'Pending')}">${app.status || 'Pending'}</span></td>
           <td>${submittedDate}</td>
           <td style="text-align: center;">
@@ -446,13 +374,7 @@
         ? new Date(app.createdAt).toLocaleDateString()
         : (app.timestamp ? 'N/A' : 'N/A');
       
-      const firstRole = app.first_preference_role === 'Other' && app.first_preference_role_other
-        ? `Other: ${escapeHtml(app.first_preference_role_other)}`
-        : (app.first_preference_role || '-');
-      
-      const secondRole = app.second_preference_role === 'Other' && app.second_preference_role_other
-        ? `Other: ${escapeHtml(app.second_preference_role_other)}`
-        : (app.second_preference_role || '-');
+      const committee = app.committee || '-';
 
       const isExpanded = expandedRows.has(app.id);
       const expandIcon = isExpanded 
@@ -485,10 +407,6 @@
                 <div>${escapeHtml(app.district || '-')}</div>
               </div>
               <div class="detail-item">
-                <label>Year of Serving as DRR:</label>
-                <div>${escapeHtml(app.drr_year || '-')}</div>
-              </div>
-              <div class="detail-item">
                 <label>Years in Rotaract:</label>
                 <div>${escapeHtml(app.years_in_rotaract || '-')}</div>
               </div>
@@ -496,23 +414,19 @@
           </div>
 
           <div class="detail-section">
-            <h3>Role Preferences</h3>
+            <h3>Committee Application</h3>
             <div class="detail-grid">
               <div class="detail-item detail-item--full">
-                <label>1st Preference Role:</label>
-                <div>${firstRole}</div>
+                <label>Committee:</label>
+                <div>${escapeHtml(committee)}</div>
               </div>
               <div class="detail-item detail-item--full">
-                <label>Vision for 1st Preference Role:</label>
-                <div class="detail-textarea">${escapeHtmlWithBreaks(app.vision_first_role)}</div>
+                <label>Rotaract Journey:</label>
+                <div class="detail-textarea">${escapeHtmlWithBreaks(app.rotaract_journey)}</div>
               </div>
               <div class="detail-item detail-item--full">
-                <label>2nd Preference Role:</label>
-                <div>${secondRole}</div>
-              </div>
-              <div class="detail-item detail-item--full">
-                <label>Vision for 2nd Preference Role:</label>
-                <div class="detail-textarea">${escapeHtmlWithBreaks(app.vision_second_role)}</div>
+                <label>Why You Are a Strong Fit:</label>
+                <div class="detail-textarea">${escapeHtmlWithBreaks(app.vision_committee)}</div>
               </div>
             </div>
           </div>
@@ -579,12 +493,8 @@
               <div class="mobile-card__info-value">${escapeHtml(app.phone || '-')}</div>
             </div>
             <div class="mobile-card__info-item">
-              <div class="mobile-card__info-label">1st Preference</div>
-              <div class="mobile-card__info-value">${firstRole}</div>
-            </div>
-            <div class="mobile-card__info-item">
-              <div class="mobile-card__info-label">2nd Preference</div>
-              <div class="mobile-card__info-value">${secondRole}</div>
+              <div class="mobile-card__info-label">Committee</div>
+              <div class="mobile-card__info-value">${escapeHtml(committee)}</div>
             </div>
             <div class="mobile-card__info-item">
               <div class="mobile-card__info-label">Submitted</div>
@@ -728,13 +638,23 @@
 
   // Update stats
   function updateStats() {
+    const statsSource = getCommitteeScopedApplications();
     const stats = {
-      total: applications.length,
-      pending: applications.filter(app => app.status === 'Pending').length,
-      review: applications.filter(app => app.status === 'Under Review').length,
-      shortlisted: applications.filter(app => app.status === 'Shortlisted').length,
-      selected: applications.filter(app => app.status === 'Selected').length,
-      rejected: applications.filter(app => app.status === 'Rejected').length
+      total: statsSource.length,
+      pending: statsSource.filter(app => app.status === 'Pending').length,
+      review: statsSource.filter(app => app.status === 'Under Review').length,
+      shortlisted: statsSource.filter(app => app.status === 'Shortlisted').length,
+      selected: statsSource.filter(app => app.status === 'Selected').length,
+      rejected: statsSource.filter(app => app.status === 'Rejected').length
+    };
+
+    const committeeStats = {
+      design: applications.filter(app => app.committee === 'Design and Visual Communications').length,
+      social: applications.filter(app => app.committee === 'Social Media and Outreach').length,
+      video: applications.filter(app => app.committee === 'Video & Story Telling').length,
+      editorial: applications.filter(app => app.committee === 'Editorial and Content').length,
+      web: applications.filter(app => app.committee === 'Web and Tech').length,
+      programs: applications.filter(app => app.committee === 'Programs & Operations').length
     };
 
     document.getElementById('statTotal').textContent = stats.total;
@@ -743,12 +663,35 @@
     document.getElementById('statShortlisted').textContent = stats.shortlisted;
     document.getElementById('statSelected').textContent = stats.selected;
     document.getElementById('statRejected').textContent = stats.rejected;
+
+    document.getElementById('statCommitteeDesign').textContent = committeeStats.design;
+    document.getElementById('statCommitteeSocial').textContent = committeeStats.social;
+    document.getElementById('statCommitteeVideo').textContent = committeeStats.video;
+    document.getElementById('statCommitteeEditorial').textContent = committeeStats.editorial;
+    document.getElementById('statCommitteeWeb').textContent = committeeStats.web;
+    document.getElementById('statCommitteePrograms').textContent = committeeStats.programs;
+
+    committeeStatCards.forEach(card => {
+      card.classList.toggle('committee-stat-card--active', card.dataset.committee === committeeFilter.value);
+    });
   }
 
 
   // Filters - all client-side for instant results
   statusFilter.addEventListener('change', renderApplications);
-  roleFilter.addEventListener('change', renderApplications);
+  committeeFilter.addEventListener('change', () => {
+    renderApplications();
+    updateStats();
+  });
+
+  committeeStatCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const cardCommittee = card.dataset.committee || '';
+      committeeFilter.value = committeeFilter.value === cardCommittee ? '' : cardCommittee;
+      renderApplications();
+      updateStats();
+    });
+  });
   
   // Instant search on each keystroke (client-side filtering)
   searchInput.addEventListener('input', () => {
@@ -763,10 +706,11 @@
   if (clearFiltersBtn) {
     clearFiltersBtn.addEventListener('click', () => {
       statusFilter.value = '';
-      roleFilter.value = '';
+      committeeFilter.value = '';
       searchInput.value = '';
       if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
       renderApplications(); // Client-side filtering, instant update
+      updateStats();
     });
   }
 
@@ -804,14 +748,10 @@
         'Phone Number',
         'Current Rotaract Club',
         'Rotary International District',
-        'Year of Serving as DRR',
         'Years in Rotaract',
-        '1st Preference Role',
-        '1st Preference Role (Other)',
-        'Vision for 1st Preference Role',
-        '2nd Preference Role',
-        '2nd Preference Role (Other)',
-        'Vision for 2nd Preference Role',
+        'Committee',
+        'Rotaract Journey',
+        'Why You Are a Strong Fit for This Committee',
         'Vision for RSAMDIO 2026-27',
         'Status',
         'Submitted Date',
@@ -819,12 +759,6 @@
       ];
       
       const rows = filtered.map(app => {
-        // Format role preferences
-        const firstRole = app.first_preference_role || '';
-        const firstRoleOther = (firstRole === 'Other' && app.first_preference_role_other) ? app.first_preference_role_other : '';
-        const secondRole = app.second_preference_role || '';
-        const secondRoleOther = (secondRole === 'Other' && app.second_preference_role_other) ? app.second_preference_role_other : '';
-        
         // Format dates
         const submittedDate = app.createdAt ? new Date(app.createdAt).toLocaleString() : (app.timestamp ? new Date(app.timestamp.seconds * 1000).toLocaleString() : 'N/A');
         const updatedDate = app.updatedAt ? new Date(app.updatedAt.seconds * 1000).toLocaleString() : (app.updatedAt ? new Date(app.updatedAt).toLocaleString() : '');
@@ -835,14 +769,10 @@
           app.phone || '',
           app.current_club || '',
           app.district || '',
-          app.drr_year || '',
           app.years_in_rotaract || '',
-          firstRole,
-          firstRoleOther,
-          app.vision_first_role || '',
-          secondRole,
-          secondRoleOther,
-          app.vision_second_role || '',
+          app.committee || '',
+          app.rotaract_journey || '',
+          app.vision_committee || '',
           app.vision_rsamdio || '',
           app.status || 'Pending',
           submittedDate,

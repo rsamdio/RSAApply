@@ -9,9 +9,9 @@
   const QUESTIONS = [
     {
       id: 'intro',
-      title: 'Board Nominations',
+      title: 'Committee Nominations',
       type: 'intro',
-      description: 'Thank you for your interest in serving RSA MDIO in RY 2026-27. Please complete this nomination form to express your interest.<br><br><strong>Deadline: 10 January 2026</strong>'
+      description: 'Thank you for your interest in serving RSA MDIO in RY 2026-27. Please complete this nomination form to apply for a committee role.<br><br><strong>Deadline: 10 January 2026</strong>'
     },
     {
       id: 'full_name',
@@ -54,14 +54,6 @@
       hint: 'Please enter your Rotary International district number (e.g., 3191).'
     },
     {
-      id: 'drr_year',
-      title: 'Year of Serving as DRR',
-      type: 'text',
-      required: true,
-      placeholder: 'e.g., 2023-24',
-      hint: 'Please enter the year you served as DRR (e.g., 2023-24).'
-    },
-    {
       id: 'years_in_rotaract',
       title: 'Years in Rotaract',
       type: 'text',
@@ -70,76 +62,35 @@
       hint: 'Please enter the number of years you have been in Rotaract.'
     },
     {
-      id: 'first_preference_role',
-      title: 'Your 1st Preference Role',
+      id: 'committee',
+      title: 'Select the Committee You Are Applying For',
       type: 'radio',
       required: true,
       options: [
-        'Vice President',
-        'General Secretary',
-        'Secretary (Reporting / Communications / Initiatives / Special Programs)',
-        'Treasurer',
-        'Sergeant at Arms',
-        'Chairperson - R.O.A.R.',
-        'Editor',
-        'Zone Director / Coordinator',
-        'Director - International Relations',
-        'Director - Service Programs',
-        'Director - Foundation Programs',
-        'Director - Learning Programs',
-        'Director - Fellowship Programs',
-        'Director - Membership Programs',
-        'Director - Design & Branding',
-        'Director - Marketing & Communications',
-        'Director - Web & Tech',
-        'Other'
+        'Design and Visual Communications',
+        'Social Media and Outreach',
+        'Video & Story Telling',
+        'Editorial and Content',
+        'Web and Tech',
+        'Programs & Operations'
       ],
-      otherText: true,
-      hint: 'Select your first preference role. If you select "Other", please specify.'
+      hint: 'Choose one committee from the list.'
     },
     {
-      id: 'vision_first_role',
-      title: 'Vision for 1st Preference Role',
+      id: 'rotaract_journey',
+      title: 'Tell Us About Your Rotaract Journey',
       type: 'textarea',
       required: true,
-      placeholder: 'Share your vision and goals for this role...',
-      hint: 'Please describe your vision, goals, and what you hope to achieve in this role.'
+      placeholder: 'Share your Rotaract journey, key milestones, and experiences...',
+      hint: 'Briefly describe your Rotaract journey and the experiences that shaped your leadership.'
     },
     {
-      id: 'second_preference_role',
-      title: 'Your 2nd Preference Role',
-      type: 'radio',
-      required: true,
-      options: [
-        'Vice President',
-        'General Secretary',
-        'Secretary (Reporting / Communications / Initiatives / Special Programs)',
-        'Treasurer',
-        'Sergeant at Arms',
-        'Chairperson - R.O.A.R.',
-        'Editor',
-        'Zone Director / Coordinator',
-        'Director - International Relations',
-        'Director - Service Programs',
-        'Director - Foundation Programs',
-        'Director - Learning Programs',
-        'Director - Fellowship Programs',
-        'Director - Membership Programs',
-        'Director - Design & Branding',
-        'Director - Marketing & Communications',
-        'Director - Web & Tech',
-        'Other'
-      ],
-      otherText: true,
-      hint: 'Select your second preference role. If you select "Other", please specify.'
-    },
-    {
-      id: 'vision_second_role',
-      title: 'Vision for 2nd Preference Role',
+      id: 'vision_committee',
+      title: 'Why Are You a Strong Fit for This Committee?',
       type: 'textarea',
       required: true,
-      placeholder: 'Share your vision and goals for this role...',
-      hint: 'Please describe your vision, goals, and what you hope to achieve in this role.'
+      placeholder: 'Share your vision, skills, and how you will contribute to this committee...',
+      hint: 'Tell us what value you will bring and what outcomes you hope to drive.'
     },
     {
       id: 'vision_rsamdio',
@@ -382,11 +333,11 @@
     if (q.type === 'intro') {
       const start = el('button', { class: 'btn btn--primary', onclick: (e) => { e.preventDefault(); goTo(1); } }, 'Start Nomination Form');
       const viewRoles = el('a', { 
-        href: 'roles/', 
+        href: '/committees', 
         class: 'btn btn--secondary btn--roles-link',
         onclick: (e) => { e.stopPropagation(); }
       }, 
-        'View all roles and responsibilities',
+        'View all Roles and Responsibilities',
         el('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', class: 'btn__icon' },
           el('path', { d: 'M5 12h14M12 5l7 7-7 7' })
         )
@@ -420,28 +371,16 @@
       if (current) textarea.value = current;
       optionsWrap.append(textarea);
     } else if (q.type === 'review') {
-      // Format role preferences to include "Other" values
-      let firstRole = state.answers.first_preference_role || '-';
-      if (firstRole === 'Other' && state.answers.first_preference_role_other) {
-        firstRole = `Other: ${state.answers.first_preference_role_other}`;
-      }
-      let secondRole = state.answers.second_preference_role || '-';
-      if (secondRole === 'Other' && state.answers.second_preference_role_other) {
-        secondRole = `Other: ${state.answers.second_preference_role_other}`;
-      }
-      
       const reviewItems = [
         [QUESTIONS.find(q => q.id === 'full_name').title, state.answers.full_name || '-'],
         [QUESTIONS.find(q => q.id === 'email').title, state.answers.email || '-'],
         [QUESTIONS.find(q => q.id === 'phone').title, state.answers.phone || '-'],
         [QUESTIONS.find(q => q.id === 'current_club').title, state.answers.current_club || '-'],
         [QUESTIONS.find(q => q.id === 'district').title, state.answers.district || '-'],
-        [QUESTIONS.find(q => q.id === 'drr_year').title, state.answers.drr_year || '-'],
         [QUESTIONS.find(q => q.id === 'years_in_rotaract').title, state.answers.years_in_rotaract || '-'],
-        [QUESTIONS.find(q => q.id === 'first_preference_role').title, firstRole],
-        [QUESTIONS.find(q => q.id === 'vision_first_role').title, state.answers.vision_first_role || '-'],
-        [QUESTIONS.find(q => q.id === 'second_preference_role').title, secondRole],
-        [QUESTIONS.find(q => q.id === 'vision_second_role').title, state.answers.vision_second_role || '-'],
+        [QUESTIONS.find(q => q.id === 'committee').title, state.answers.committee || '-'],
+        [QUESTIONS.find(q => q.id === 'rotaract_journey').title, state.answers.rotaract_journey || '-'],
+        [QUESTIONS.find(q => q.id === 'vision_committee').title, state.answers.vision_committee || '-'],
         [QUESTIONS.find(q => q.id === 'vision_rsamdio').title, state.answers.vision_rsamdio || '-']
       ];
       
@@ -453,8 +392,8 @@
         const item = el('div', { class: 'review-item' },
           el('strong', { class: 'review-key' }, key + ': '),
           // Special handling for textarea content to preserve line breaks
-          (key === QUESTIONS.find(q => q.id === 'vision_first_role').title || 
-           key === QUESTIONS.find(q => q.id === 'vision_second_role').title ||
+          (key === QUESTIONS.find(q => q.id === 'rotaract_journey').title || 
+           key === QUESTIONS.find(q => q.id === 'vision_committee').title ||
            key === QUESTIONS.find(q => q.id === 'vision_rsamdio').title)
             ? el('div', { class: 'review-value review-value--textarea' }, value)
             : el('span', { class: 'review-value' }, value)
@@ -467,8 +406,8 @@
       if (q.id === 'district_number') {
         optionsWrap.classList.add('grid');
       }
-      // For preference roles, render full-width options
-      if (q.id === 'first_preference_role' || q.id === 'second_preference_role') {
+      // For committee selection, render full-width options
+      if (q.id === 'committee') {
         optionsWrap.classList.add('grid', 'grid--full');
       }
       
@@ -859,14 +798,6 @@
         status: 'Pending',
         createdAt: new Date().toISOString()
       };
-
-      // Handle "Other" values for preference roles
-      if (submissionData.first_preference_role === 'Other') {
-        submissionData.first_preference_role_other = submissionData.first_preference_role_other || '';
-      }
-      if (submissionData.second_preference_role === 'Other') {
-        submissionData.second_preference_role_other = submissionData.second_preference_role_other || '';
-      }
 
       // Submit to Firebase Firestore
       await db.collection('nominations').add(submissionData);

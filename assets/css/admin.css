@@ -355,6 +355,94 @@
   color: var(--color-danger);
 }
 
+.committee-stats {
+  margin-top: 24px;
+}
+
+.committee-stats__title {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.committee-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.committee-stat-card {
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.committee-stat-card:hover {
+  border-color: rgba(30, 58, 138, 0.7);
+}
+
+.committee-stat-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.committee-stat-card--active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.25);
+  background: rgba(30, 58, 138, 0.12);
+}
+
+.committee-stat-card .committee-stat-card__value {
+  margin-bottom: 8px;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.committee-stat-card .committee-stat-card__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .committee-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .committee-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .committee-stat-card {
+    padding: 16px;
+  }
+  
+  .committee-stat-card .committee-stat-card__value {
+    font-size: 24px;
+  }
+  
+  .committee-stat-card .committee-stat-card__label {
+    font-size: 11px;
+  }
+}
+
 /* ===== Applications Section ===== */
 .applications-section {
   background: var(--color-dark-surface);
@@ -1206,6 +1294,7 @@
     font-size: 11px;
   }
 
+
   .table-toolbar {
     padding: 16px;
     gap: 16px;
@@ -1294,6 +1383,7 @@
   .stat-card__value {
     font-size: 22px;
   }
+
 
   .table-toolbar {
     padding: 12px;

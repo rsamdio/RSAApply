@@ -1,2 +1,7 @@
 # Redirect default Netlify subdomain to primary domain
 https://rsaapply.netlify.app/* https://apply.rsamdio.com/:splat 301!
+
+# Pretty URL rewrites for static HTML pages
+/roles /roles.html 200
+/committees /committees.html 200
+/admin /admin.html 200

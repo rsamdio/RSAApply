@@ -44,28 +44,14 @@
     <div class="login-screen" id="loginScreen">
       <div class="login-card">
         <h1 class="login-title">RSAMDIO Admin</h1>
-        <p class="login-subtitle">Sign in with a magic link sent to your email</p>
-        <form id="loginForm" class="login-form">
-          <div class="form-group">
-            <label for="adminEmail">Email</label>
-            <input type="email" id="adminEmail" class="form-input" required placeholder="admin@example.com" autocomplete="email" />
-          </div>
-          <button type="submit" class="btn btn--primary btn--full" id="sendLinkBtn">
-            <span id="sendLinkText">Send Magic Link</span>
-            <span id="sendLinkSpinner" class="spinner hidden"></span>
+        <p class="login-subtitle">Sign in with your Google account to access the admin dashboard</p>
+        <div class="login-form">
+          <button type="button" class="btn btn--primary btn--full" id="googleSignInBtn">
+            <span id="googleSignInText">Continue with Google</span>
+            <span id="googleSignInSpinner" class="spinner hidden"></span>
           </button>
-        </form>
-        <div id="loginError" class="error-message hidden"></div>
-        <div id="loginSuccess" class="success-message hidden">
-          <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22,4 12,14.01 9,11.01"></polyline>
-          </svg>
-          <div>
-            <strong>Magic link sent!</strong>
-            <p>Check your email and click the link to sign in. The link will expire in 10 minutes.</p>
-          </div>
         </div>
+        <div id="loginError" class="error-message hidden"></div>
       </div>
     </div>
 
@@ -122,6 +108,36 @@
               <div class="stat-card__label">Rejected</div>
             </div>
           </div>
+
+          <div class="committee-stats">
+            <h3 class="committee-stats__title">Committee-wise Nominations</h3>
+            <div class="committee-stats-grid">
+              <button type="button" class="stat-card committee-stat-card" data-committee="Design and Visual Communications">
+                <div class="committee-stat-card__value" id="statCommitteeDesign">0</div>
+                <div class="committee-stat-card__label">Design and Visual Communications</div>
+              </button>
+              <button type="button" class="stat-card committee-stat-card" data-committee="Social Media and Outreach">
+                <div class="committee-stat-card__value" id="statCommitteeSocial">0</div>
+                <div class="committee-stat-card__label">Social Media and Outreach</div>
+              </button>
+              <button type="button" class="stat-card committee-stat-card" data-committee="Video & Story Telling">
+                <div class="committee-stat-card__value" id="statCommitteeVideo">0</div>
+                <div class="committee-stat-card__label">Video &amp; Story Telling</div>
+              </button>
+              <button type="button" class="stat-card committee-stat-card" data-committee="Editorial and Content">
+                <div class="committee-stat-card__value" id="statCommitteeEditorial">0</div>
+                <div class="committee-stat-card__label">Editorial and Content</div>
+              </button>
+              <button type="button" class="stat-card committee-stat-card" data-committee="Web and Tech">
+                <div class="committee-stat-card__value" id="statCommitteeWeb">0</div>
+                <div class="committee-stat-card__label">Web and Tech</div>
+              </button>
+              <button type="button" class="stat-card committee-stat-card" data-committee="Programs & Operations">
+                <div class="committee-stat-card__value" id="statCommitteePrograms">0</div>
+                <div class="committee-stat-card__label">Programs &amp; Operations</div>
+              </button>
+            </div>
+          </div>
         </section>
 
         <!-- Applications Section -->
@@ -145,26 +161,14 @@
                   </select>
                 </div>
                 <div class="filter-item">
-                  <select id="roleFilter" class="filter-select" title="Filter by role">
-                    <option value="">All Roles</option>
-                    <option value="Vice President">Vice President</option>
-                    <option value="General Secretary">General Secretary</option>
-                    <option value="Secretary (Reporting / Communications / Initiatives / Special Programs)">Secretary (Reporting / Communications / Initiatives / Special Programs)</option>
-                    <option value="Treasurer">Treasurer</option>
-                    <option value="Sergeant at Arms">Sergeant at Arms</option>
-                    <option value="Chairperson - R.O.A.R.">Chairperson - R.O.A.R.</option>
-                    <option value="Editor">Editor</option>
-                    <option value="Zone Director / Coordinator">Zone Director / Coordinator</option>
-                    <option value="Director - International Relations">Director - International Relations</option>
-                    <option value="Director - Service Programs">Director - Service Programs</option>
-                    <option value="Director - Foundation Programs">Director - Foundation Programs</option>
-                    <option value="Director - Learning Programs">Director - Learning Programs</option>
-                    <option value="Director - Fellowship Programs">Director - Fellowship Programs</option>
-                    <option value="Director - Membership Programs">Director - Membership Programs</option>
-                    <option value="Director - Design & Branding">Director - Design & Branding</option>
-                    <option value="Director - Marketing & Communications">Director - Marketing & Communications</option>
-                    <option value="Director - Web & Tech">Director - Web & Tech</option>
-                    <option value="Other">Other</option>
+                  <select id="roleFilter" class="filter-select" title="Filter by committee">
+                    <option value="">All Committees</option>
+                    <option value="Design and Visual Communications">Design and Visual Communications</option>
+                    <option value="Social Media and Outreach">Social Media and Outreach</option>
+                    <option value="Video & Story Telling">Video & Story Telling</option>
+                    <option value="Editorial and Content">Editorial and Content</option>
+                    <option value="Web and Tech">Web and Tech</option>
+                    <option value="Programs & Operations">Programs & Operations</option>
                   </select>
                 </div>
                 <div class="filter-item filter-item--search">
@@ -207,8 +211,7 @@
                   </th>
                   <th>Email</th>
                   <th>Phone</th>
-                  <th>1st Preference</th>
-                  <th>2nd Preference</th>
+                  <th>Committee</th>
                   <th>
                     <button class="sort-btn" data-sort="status">
                       <span>Status</span>
@@ -230,7 +233,7 @@
               </thead>
               <tbody id="applicationsTableBody">
                 <tr>
-                  <td colspan="8" class="table-loading">
+                  <td colspan="7" class="table-loading">
                     <div class="loading-state">
                       <div class="spinner-large"></div>
                       <span>Loading applications...</span>
