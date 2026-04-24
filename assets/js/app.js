@@ -11,7 +11,7 @@
       id: 'intro',
       title: 'Committee Nominations',
       type: 'intro',
-      description: 'Thank you for your interest in serving RSA MDIO in RY 2026-27. Please complete this nomination form to apply for a committee role.<br><br><strong>Deadline: 10 January 2026</strong>'
+      description: 'Thank you for your interest in serving RSA MDIO in RY 2026-27. Please complete this nomination form to apply for a committee role.<br><br><strong>Deadline: 26 April 2026</strong>'
     },
     {
       id: 'full_name',
