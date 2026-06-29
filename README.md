@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/cf84a1c9-5bde-41b3-a9fd-46d698c65524/deploy-status)](https://app.netlify.com/projects/rsaapply/deploys)
+
 # RSA MDIO Nomination Application System
 
 A modern web application for collecting and managing leadership position nominations for Rotaract South Asia MDIO (RSA MDIO) for Rotary Year 2026-27.
